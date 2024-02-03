@@ -70,6 +70,11 @@ Blackboard Ultra has a bug where the correct and incorrect answers are not forma
 					</respcondition>
 				</resprocessing>
 
+In the above example, all answers (1 correct and 3 incorrect) are within the `<respcondition title="correct">` section. The incorrect answers are wrapped in `<not>` tags, which is not the correct formatting. The incorrect answers should be within the `<respcondition title="incorrect">` section, which in the above example, does not contain any answers, only an `<other/>` tag. This script removes any answer within `<respcondition title="correct">` and wrapped in a `<not>` tag and leave only the correct answer. Ideally, the incorrect answers would be moved to the `<respcondition title="incorrect">` section, but this script relies on the `<other/>` tag to assume anything other than the correct answer is wrong.
+
+*3. Removes any remaining <code>&lt;and&gt;</code> tags*
+
+Step #2 above leaves behind the correct answer, but it's still wrapped in `<and>` tags. This step removes those tags. Note that, as written, it removes *all* `<and>' tags, so if your zip file contains these tags elsewhere, they'll be removed.
 
 ## Setup
 ### Install dependencies

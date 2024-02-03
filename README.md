@@ -109,4 +109,7 @@ This will launch the script and a Flask web app.
 In your browser, go to http://127.0.0.1:5000
 You will be taken to the web interface for the Poolboy app.
 
-When your finished, go back to Command Prompt and type `CTRL` + `C` to quit the server/app.
+When you're finished, go back to Command Prompt and type `CTRL` + `C` to quit the server/app.
+
+## Misc.
+Image: "High Maintenance" by Nelson De La Nuez

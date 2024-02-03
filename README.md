@@ -83,7 +83,7 @@ You'll need Python and Flask installed on your system for this to work. These in
      Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
 This command will set the execution policy to allow the execution of locally created scripts.
 
-    .\install_python_flask.ps1
+    .\poolboy-setup.ps1
 This command will check if Python and Flask are already installed. If they're not installed, it will install them.
 
     Set-ExecutionPolicy Restricted -Scope CurrentUser -Force

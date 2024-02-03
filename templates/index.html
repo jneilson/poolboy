@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poolboy</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+
+        img {
+            width: 200px;
+            height: auto;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        p {
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        label {
+            margin-top: 10px;
+        }
+
+        input {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 300px;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 300px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+    </style>
+
+</head>
+<body>
+    <img src="https://csplib.io/images/pb.jpg">
+    <h1>Poolboy</h1>
+    <p>A simple ChatGPT-genrated Python and Flask script that takes a single Blackboard Ultra question pool (bank) and performs the following fixes:</p>
+    <ul>
+        <li>Replaces any instances of "Multiple Answer" with "Multiple Choice"</li>
+        <li>Within the <code>&lt;resprocessing&gt;&lt;respcondition title="correct"&gt;</code> section of each question, removes any answer wrapped in a <code>&lt;not&gt;</code> tag</li>
+        <li>Removes any remaining <code>&lt;and&gt;</code> tags</li>
+    </ul>
+    <p>Select a zip file and then specify the name of the output file. The script will create a new zip file with the name you've specified. You can then upload the question pool to an LMS and it wont be broken. </p>
+    <form method="post" action="/" enctype="multipart/form-data">
+        <label for="zip_file">Select zip file:</label>
+        <input type="file" id="zip_file" name="zip_file" accept=".zip" required>
+        <label for="extract_path">Enter extract path:</label>
+        <input type="text" id="extract_path" name="extract_path" required>
+        <button type="submit">Process Files</button>
+    </form>
+</body>
+</html>

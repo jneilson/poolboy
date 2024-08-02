@@ -1,8 +1,8 @@
 import os
-import sys
 import re
 import zipfile
 from flask import Flask, render_template, request
+import xml.etree.ElementTree as ET
 
 app = Flask(__name__)
 
@@ -63,10 +63,45 @@ def remove_and_text_in_file(file_path):
 
     return False
 
+def update_xml(file_path):
+    try:
+        # Parse the XML file
+        tree = ET.parse(file_path)
+        root = tree.getroot()
+
+        # Recursive function to update text in elements
+        def update_element(element):
+            # Check if the element text needs to be updated
+            if element.text:
+                # Replace "Either/Or" with "True/False"
+                if "Either/Or" in element.text:
+                    element.text = element.text.replace("Either/Or", "True/False")
+                # Replace "true_false.true" with "true"
+                if "true_false.true" in element.text:
+                    element.text = element.text.replace("true_false.true", "true")
+                # Replace "true_false.false" with "false"
+                if "true_false.false" in element.text:
+                    element.text = element.text.replace("true_false.false", "false")
+            
+            # Recursively update child elements
+            for child in element:
+                update_element(child)
+
+        # Update the XML elements
+        update_element(root)
+
+        # Save the updated XML back to the file
+        tree.write(file_path, encoding='utf-8', xml_declaration=True)
+        return True
+    except ET.ParseError:
+        # Return False if the file is not a valid XML
+        return False
+
 def process_files(directory_path):
     modified_files_replace = []
     modified_files_remove_not = []
     modified_files_remove_and = []
+    modified_files_update_xml = []
 
     for root, dirs, files in os.walk(directory_path):
         for file_name in files:
@@ -81,7 +116,11 @@ def process_files(directory_path):
             if remove_and_text_in_file(file_path):
                 modified_files_remove_and.append(file_path)
 
-    return modified_files_replace, modified_files_remove_not, modified_files_remove_and
+            # Update XML files if applicable
+            if update_xml(file_path):
+                modified_files_update_xml.append(file_path)
+
+    return modified_files_replace, modified_files_remove_not, modified_files_remove_and, modified_files_update_xml
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -92,13 +131,13 @@ def index():
         zip_file.save(zip_file.filename)
         extract_zip(zip_file.filename, extract_path)
 
-        modified_files_replace, _, _ = process_files(extract_path)
+        modified_files_replace, _, _, modified_files_update_xml = process_files(extract_path)
 
         # Zip the entire extract path
         output_zip_path = os.path.join(os.path.dirname(zip_file.filename), f'{os.path.basename(extract_path)}.zip')
         zip_entire_path(extract_path, output_zip_path)
 
-        return render_template('result.html', files=modified_files_replace, output_zip_path=output_zip_path)
+        return render_template('result.html', files=modified_files_replace + modified_files_update_xml, output_zip_path=output_zip_path)
 
     return render_template('index.html')
 
